@@ -1,0 +1,148 @@
+﻿@model ModelPersona.PersonaClases.PersonaClase
+@{
+    if (Model.idPersona > 0)
+    {
+        ViewBag.Title = "Editar Persona";
+    }
+    else
+    {
+        ViewBag.Title = "Agregar Persona";
+    }
+
+    List<SelectListItem> listItemsRegimen = ViewBag.tipoRegimen;
+    List<SelectListItem> listItemsPais = ViewBag.pais;
+    List<SelectListItem> listItemsSexo = ViewBag.sexo;
+
+}
+@using (Html.BeginForm("CrudPersona", "Persona", FormMethod.Post, new { @id = "CrudPersona" }))
+{
+    @Html.HiddenFor(persona => persona.idPersona)
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Nombre</span>
+            @Html.TextBoxFor(persona => persona.Nombre, htmlAttributes: new { @class = "form-control", placeholder = "Santiago,Arturo" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.Nombre, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Apellido Paterno</span>
+            @Html.TextBoxFor(persona => persona.ApellidoPaterno, htmlAttributes: new { @class = "form-control", placeholder = "Rodríguez, Hernández" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.ApellidoPaterno, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Apellido Materno</span>
+            @Html.TextBoxFor(persona => persona.ApellidoMaterno, htmlAttributes: new { @class = "form-control", placeholder = "Rodríguez, Hernández" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.ApellidoMaterno, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Tipo de Persona</span>
+            @Html.DropDownListFor(persona => persona.idTipoRegimen, (IEnumerable<SelectListItem>)listItemsRegimen, "Seleccione un Regimen", new { @class = "form-control form-select" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.idTipoRegimen, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Fecha Nacimiento</span>
+            @Html.TextBoxFor(persona => persona.FechaNacimiento, "{0:yyyy-MM-dd}", htmlAttributes: new { @type = "date", @class = "form-control", placeholder = "seleccione fecha" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.FechaNacimiento, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">RFC</span>
+            @Html.TextBoxFor(persona => persona.RFC, htmlAttributes: new { @class = "form-control" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.RFC, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">CURP</span>
+            @Html.TextBoxFor(persona => persona.CURP, htmlAttributes: new { @class = "form-control" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.CURP, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">País de Nacimiento</span>
+            @Html.DropDownListFor(persona => persona.idPais, (IEnumerable<SelectListItem>)listItemsPais, "Seleccione un País", new { @class = "form-control form-select" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.idPais, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Sexo</span>
+            @Html.DropDownListFor(persona => persona.idSexo, (IEnumerable<SelectListItem>)listItemsSexo, "Seleccione el sexo", new { @class = "form-control form-select" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.idSexo, null, new { @class = "text-danger" })
+    </div>
+    <div>
+        <div class="input-group">
+            <span class="input-group-text">Estatus</span>
+            @Html.CheckBoxFor(persona => persona.Estatus, new { @class = "form-check-input" })
+        </div>
+        @Html.ValidationMessageFor(persona => persona.Estatus, null, new { @class = "text-danger" })
+    </div>
+    <button type="submit" class="btn btn-success" value="Guardar" name="submitButton">Guardar</button>
+    <a href="~/User/UserIndex" class="btn btn-danger">Cancelar</a>
+
+
+
+    <br />
+    <br />
+    <br />
+    <h1>Cuentas Ligadas</h1>
+    <table id="TablaDinamica" class="table table-responsive table-striped">
+    </table>
+}
+
+<script>
+    const _urlGeneral = '@Url.Content("~/")';
+    const tablaDinamica = document.querySelector('#TablaDinamica');
+    function TablaDinamicaJson(datos) {
+        var cabeceras = [];
+        if (datos.length > 0) {
+            cabeceras = Object.keys(datos[0]);
+            let celda;
+            const fila = document.createElement('tr');
+            for (var i = 0; i < cabeceras.length; i++) {
+                celda = document.createElement('th');
+                celda.textContent = cabeceras[i];
+                fila.append(celda);
+            }
+            tablaDinamica.append(fila)
+        }
+
+            let columna;
+            for (var a = 0; a < datos.length; a++) {
+                let fila = document.createElement('tr');
+                for (var b = 0; b < cabeceras.length; b++) {
+                    columna = document.createElement('td');
+                    columna.textContent = datos[a][cabeceras[b]];
+                    fila.append(columna);
+                }
+
+                tablaDinamica.append(fila);
+            }
+    }
+
+    function getCuentas() {
+        const id = '@Model.idPersona'
+        $.ajax({
+            type: "Get",
+            data: id,
+            async: false,
+            url: _urlGeneral + "Persona/getCuentas?id=" + id,
+            success: function (data) {
+                TablaDinamicaJson(data);
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', getCuentas);
+
+</script>

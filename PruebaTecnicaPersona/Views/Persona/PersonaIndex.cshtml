@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "PersonaIndex";
+    List<ModelPersona.GetPersona_Result> personList = ViewBag.Persona;
+}
+@using (Html.BeginForm("PersonaIndex", "Persona", FormMethod.Get, new { @id = "PersonaIndex" }))
+{
+    <a href="~/Persona/CrudPersona">Agregar Persona</a>
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Acciones</th>
+                <th>Nombre</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Tipo Régimen</th>
+                <th>Fecha nacimiento</th>
+                <th>RFC</th>
+                <th>CURP</th>
+                <th>País Nacimiento</th>
+                <th>Sexo</th>
+                <th>Estatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var persona in personList)
+            {
+                <tr>
+                    <td>
+                        <a class="btn btn-primary" href="~/Persona/CrudPersona/@persona.idPersona">Editar</a>
+                        <a class="btn btn-danger" href="~/Persona/DeletePersona/@persona.idPersona" id=""  value="Elimniar">Eliminar</a>
+                    </td>
+                    <td>@persona.Nombre</td>
+                    <td>@persona.ApellidoPaterno</td>
+                    <td>@persona.ApellidoMaterno</td>
+                    <td>@persona.Descripcion</td>
+                    <td>@persona.FechaNacimiento.ToString("yyyy/MM/dd")</td>
+                    <td>@persona.RFC</td>
+                    <td>@persona.CURP</td>
+                    <td>@persona.Pais</td>
+                    <td>@persona.Sexo</td>
+                    <td>@persona.Estatus</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (ViewBag.MessageModal != null)
+{
+    <script >
+        alert('@ViewBag.MessageModal');
+    </script>
+}

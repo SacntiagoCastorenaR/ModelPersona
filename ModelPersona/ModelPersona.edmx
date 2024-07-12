@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="PruebaTecnicaPersonasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CuentasBancos">
+          <Key>
+            <PropertyRef Name="idCuentas" />
+          </Key>
+          <Property Name="idCuentas" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idPersona" Type="int" Nullable="false" />
+          <Property Name="Banco" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Cuenta" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pais">
+          <Key>
+            <PropertyRef Name="idPais" />
+          </Key>
+          <Property Name="idPais" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Pais" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="idPersona" />
+          </Key>
+          <Property Name="idPersona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="ApellidoPaterno" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ApellidoMaterno" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="idTipoRegimen" Type="int" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="smalldatetime" Nullable="false" />
+          <Property Name="RFC" Type="varchar" MaxLength="18" Nullable="false" />
+          <Property Name="CURP" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="idPais" Type="int" Nullable="false" />
+          <Property Name="idSexo" Type="int" Nullable="false" />
+          <Property Name="Estatus" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sexo">
+          <Key>
+            <PropertyRef Name="idSexo" />
+          </Key>
+          <Property Name="idSexo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sexo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TipoRegimenFiscal">
+          <Key>
+            <PropertyRef Name="idTipoRegimen" />
+          </Key>
+          <Property Name="idTipoRegimen" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Persona__idPais__5070F446">
+          <End Role="Pais" Type="Self.Pais" Multiplicity="1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pais">
+              <PropertyRef Name="idPais" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="idPais" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Persona__idSexo__5165187F">
+          <End Role="Sexo" Type="Self.Sexo" Multiplicity="1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sexo">
+              <PropertyRef Name="idSexo" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="idSexo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Persona__idTipoR__4F7CD00D">
+          <End Role="TipoRegimenFiscal" Type="Self.TipoRegimenFiscal" Multiplicity="1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoRegimenFiscal">
+              <PropertyRef Name="idTipoRegimen" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="idTipoRegimen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="DeletePersona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPersona" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetPersona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetPersonaById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPersona" Type="int" Mode="In" />
+        </Function>
+        <Function Name="InsertPersona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoPaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="idTipoRegimen" Type="int" Mode="In" />
+          <Parameter Name="FechaNacimiento" Type="smalldatetime" Mode="In" />
+          <Parameter Name="RFC" Type="varchar" Mode="In" />
+          <Parameter Name="CURP" Type="varchar" Mode="In" />
+          <Parameter Name="idPais" Type="int" Mode="In" />
+          <Parameter Name="idSexo" Type="int" Mode="In" />
+          <Parameter Name="Estatus" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="JsonCuentasBancos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPersona" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdatePresona" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPersona" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoPaterno" Type="varchar" Mode="In" />
+          <Parameter Name="ApellidoMaterno" Type="varchar" Mode="In" />
+          <Parameter Name="idTipoRegimen" Type="int" Mode="In" />
+          <Parameter Name="FechaNacimiento" Type="smalldatetime" Mode="In" />
+          <Parameter Name="RFC" Type="varchar" Mode="In" />
+          <Parameter Name="CURP" Type="varchar" Mode="In" />
+          <Parameter Name="idPais" Type="int" Mode="In" />
+          <Parameter Name="idSexo" Type="int" Mode="In" />
+          <Parameter Name="Estatus" Type="bit" Mode="In" />
+        </Function>
+        <EntityContainer Name="PruebaTecnicaPersonasModelStoreContainer">
+          <EntitySet Name="CuentasBancos" EntityType="Self.CuentasBancos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pais" EntityType="Self.Pais" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sexo" EntityType="Self.Sexo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoRegimenFiscal" EntityType="Self.TipoRegimenFiscal" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Persona__idPais__5070F446" Association="Self.FK__Persona__idPais__5070F446">
+            <End Role="Pais" EntitySet="Pais" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Persona__idSexo__5165187F" Association="Self.FK__Persona__idSexo__5165187F">
+            <End Role="Sexo" EntitySet="Sexo" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Persona__idTipoR__4F7CD00D" Association="Self.FK__Persona__idTipoR__4F7CD00D">
+            <End Role="TipoRegimenFiscal" EntitySet="TipoRegimenFiscal" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PruebaTecnicaPersonasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PruebaTecnicaPersonasEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="DeletePersona">
+          <Parameter Name="idPersona" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetPersona" ReturnType="Collection(PruebaTecnicaPersonasModel.GetPersona_Result)" />
+          <FunctionImport Name="GetPersonaById" ReturnType="Collection(PruebaTecnicaPersonasModel.GetPersonaById_Result)">
+          <Parameter Name="idPersona" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="InsertPersona">
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
+            <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
+            <Parameter Name="idTipoRegimen" Mode="In" Type="Int32" />
+            <Parameter Name="FechaNacimiento" Mode="In" Type="DateTime" />
+            <Parameter Name="RFC" Mode="In" Type="String" />
+            <Parameter Name="CURP" Mode="In" Type="String" />
+            <Parameter Name="idPais" Mode="In" Type="Int32" />
+            <Parameter Name="idSexo" Mode="In" Type="Int32" />
+            <Parameter Name="Estatus" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="UpdatePresona">
+            <Parameter Name="idPersona" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="ApellidoPaterno" Mode="In" Type="String" />
+            <Parameter Name="ApellidoMaterno" Mode="In" Type="String" />
+            <Parameter Name="idTipoRegimen" Mode="In" Type="Int32" />
+            <Parameter Name="FechaNacimiento" Mode="In" Type="DateTime" />
+            <Parameter Name="RFC" Mode="In" Type="String" />
+            <Parameter Name="CURP" Mode="In" Type="String" />
+            <Parameter Name="idPais" Mode="In" Type="Int32" />
+            <Parameter Name="idSexo" Mode="In" Type="Int32" />
+            <Parameter Name="Estatus" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="CuentasBancos" EntityType="PruebaTecnicaPersonasModel.CuentasBancos" />
+          <EntitySet Name="Pais" EntityType="PruebaTecnicaPersonasModel.Pais" />
+          <EntitySet Name="Persona" EntityType="PruebaTecnicaPersonasModel.Persona" />
+          <EntitySet Name="Sexo" EntityType="PruebaTecnicaPersonasModel.Sexo" />
+          <EntitySet Name="TipoRegimenFiscal" EntityType="PruebaTecnicaPersonasModel.TipoRegimenFiscal" />
+          <AssociationSet Name="FK__Persona__idPais__5070F446" Association="PruebaTecnicaPersonasModel.FK__Persona__idPais__5070F446">
+            <End Role="Pais" EntitySet="Pais" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Persona__idSexo__5165187F" Association="PruebaTecnicaPersonasModel.FK__Persona__idSexo__5165187F">
+            <End Role="Sexo" EntitySet="Sexo" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Persona__idTipoR__4F7CD00D" Association="PruebaTecnicaPersonasModel.FK__Persona__idTipoR__4F7CD00D">
+            <End Role="TipoRegimenFiscal" EntitySet="TipoRegimenFiscal" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <FunctionImport Name="JsonCuentasBancos" ReturnType="Collection(String)">
+            <Parameter Name="idPersona" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="GetPersona_Result">
+          <Property Type="Int32" Name="idPersona" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ApellidoPaterno" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="ApellidoMaterno" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="50" />
+          <Property Type="DateTime" Name="FechaNacimiento" Nullable="false" Precision="16" />
+          <Property Type="String" Name="RFC" Nullable="false" MaxLength="18" />
+          <Property Type="String" Name="CURP" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Pais" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Sexo" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="Estatus" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetPersonaById_Result">
+          <Property Type="Int32" Name="idPersona" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="ApellidoPaterno" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="ApellidoMaterno" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="idTipoRegimen" Nullable="false" />
+          <Property Type="DateTime" Name="FechaNacimiento" Nullable="false" Precision="16" />
+          <Property Type="String" Name="RFC" Nullable="false" MaxLength="18" />
+          <Property Type="String" Name="CURP" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="idPais" Nullable="false" />
+          <Property Type="Int32" Name="idSexo" Nullable="false" />
+          <Property Type="Boolean" Name="Estatus" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="CuentasBancos">
+          <Key>
+            <PropertyRef Name="idCuentas" />
+          </Key>
+          <Property Name="idCuentas" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idPersona" Type="Int32" Nullable="false" />
+          <Property Name="Banco" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Cuenta" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Pais">
+          <Key>
+            <PropertyRef Name="idPais" />
+          </Key>
+          <Property Name="idPais" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Pais1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Persona" Relationship="PruebaTecnicaPersonasModel.FK__Persona__idPais__5070F446" FromRole="Pais" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="idPersona" />
+          </Key>
+          <Property Name="idPersona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ApellidoPaterno" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ApellidoMaterno" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="idTipoRegimen" Type="Int32" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RFC" Type="String" Nullable="false" MaxLength="18" FixedLength="false" Unicode="false" />
+          <Property Name="CURP" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="idPais" Type="Int32" Nullable="false" />
+          <Property Name="idSexo" Type="Int32" Nullable="false" />
+          <Property Name="Estatus" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Pais" Relationship="PruebaTecnicaPersonasModel.FK__Persona__idPais__5070F446" FromRole="Persona" ToRole="Pais" />
+          <NavigationProperty Name="Sexo" Relationship="PruebaTecnicaPersonasModel.FK__Persona__idSexo__5165187F" FromRole="Persona" ToRole="Sexo" />
+          <NavigationProperty Name="TipoRegimenFiscal" Relationship="PruebaTecnicaPersonasModel.FK__Persona__idTipoR__4F7CD00D" FromRole="Persona" ToRole="TipoRegimenFiscal" />
+        </EntityType>
+        <EntityType Name="Sexo">
+          <Key>
+            <PropertyRef Name="idSexo" />
+          </Key>
+          <Property Name="idSexo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sexo1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Persona" Relationship="PruebaTecnicaPersonasModel.FK__Persona__idSexo__5165187F" FromRole="Sexo" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="TipoRegimenFiscal">
+          <Key>
+            <PropertyRef Name="idTipoRegimen" />
+          </Key>
+          <Property Name="idTipoRegimen" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Persona" Relationship="PruebaTecnicaPersonasModel.FK__Persona__idTipoR__4F7CD00D" FromRole="TipoRegimenFiscal" ToRole="Persona" />
+        </EntityType>
+        <Association Name="FK__Persona__idPais__5070F446">
+          <End Type="PruebaTecnicaPersonasModel.Pais" Role="Pais" Multiplicity="1" />
+          <End Type="PruebaTecnicaPersonasModel.Persona" Role="Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pais">
+              <PropertyRef Name="idPais" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="idPais" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Persona__idSexo__5165187F">
+          <End Type="PruebaTecnicaPersonasModel.Sexo" Role="Sexo" Multiplicity="1" />
+          <End Type="PruebaTecnicaPersonasModel.Persona" Role="Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sexo">
+              <PropertyRef Name="idSexo" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="idSexo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Persona__idTipoR__4F7CD00D">
+          <End Type="PruebaTecnicaPersonasModel.TipoRegimenFiscal" Role="TipoRegimenFiscal" Multiplicity="1" />
+          <End Type="PruebaTecnicaPersonasModel.Persona" Role="Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoRegimenFiscal">
+              <PropertyRef Name="idTipoRegimen" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="idTipoRegimen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PruebaTecnicaPersonasModelStoreContainer" CdmEntityContainer="PruebaTecnicaPersonasEntities">
+          <FunctionImportMapping FunctionImportName="DeletePersona" FunctionName="PruebaTecnicaPersonasModel.Store.DeletePersona" />
+          <FunctionImportMapping FunctionImportName="GetPersona" FunctionName="PruebaTecnicaPersonasModel.Store.GetPersona">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PruebaTecnicaPersonasModel.GetPersona_Result">
+                <ScalarProperty Name="idPersona" ColumnName="idPersona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="CURP" ColumnName="CURP" />
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+                <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPersonaById" FunctionName="PruebaTecnicaPersonasModel.Store.GetPersonaById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PruebaTecnicaPersonasModel.GetPersonaById_Result">
+                <ScalarProperty Name="idPersona" ColumnName="idPersona" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="idTipoRegimen" ColumnName="idTipoRegimen" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="CURP" ColumnName="CURP" />
+                <ScalarProperty Name="idPais" ColumnName="idPais" />
+                <ScalarProperty Name="idSexo" ColumnName="idSexo" />
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="InsertPersona" FunctionName="PruebaTecnicaPersonasModel.Store.InsertPersona" />
+          <FunctionImportMapping FunctionImportName="UpdatePresona" FunctionName="PruebaTecnicaPersonasModel.Store.UpdatePresona" />
+          <EntitySetMapping Name="CuentasBancos">
+            <EntityTypeMapping TypeName="PruebaTecnicaPersonasModel.CuentasBancos">
+              <MappingFragment StoreEntitySet="CuentasBancos">
+                <ScalarProperty Name="Cuenta" ColumnName="Cuenta" />
+                <ScalarProperty Name="Banco" ColumnName="Banco" />
+                <ScalarProperty Name="idPersona" ColumnName="idPersona" />
+                <ScalarProperty Name="idCuentas" ColumnName="idCuentas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pais">
+            <EntityTypeMapping TypeName="PruebaTecnicaPersonasModel.Pais">
+              <MappingFragment StoreEntitySet="Pais">
+                <ScalarProperty Name="Pais1" ColumnName="Pais" />
+                <ScalarProperty Name="idPais" ColumnName="idPais" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persona">
+            <EntityTypeMapping TypeName="PruebaTecnicaPersonasModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+                <ScalarProperty Name="idSexo" ColumnName="idSexo" />
+                <ScalarProperty Name="idPais" ColumnName="idPais" />
+                <ScalarProperty Name="CURP" ColumnName="CURP" />
+                <ScalarProperty Name="RFC" ColumnName="RFC" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="idTipoRegimen" ColumnName="idTipoRegimen" />
+                <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
+                <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idPersona" ColumnName="idPersona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sexo">
+            <EntityTypeMapping TypeName="PruebaTecnicaPersonasModel.Sexo">
+              <MappingFragment StoreEntitySet="Sexo">
+                <ScalarProperty Name="Sexo1" ColumnName="Sexo" />
+                <ScalarProperty Name="idSexo" ColumnName="idSexo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoRegimenFiscal">
+            <EntityTypeMapping TypeName="PruebaTecnicaPersonasModel.TipoRegimenFiscal">
+              <MappingFragment StoreEntitySet="TipoRegimenFiscal">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="idTipoRegimen" ColumnName="idTipoRegimen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="JsonCuentasBancos" FunctionName="PruebaTecnicaPersonasModel.Store.JsonCuentasBancos" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
