@@ -53,6 +53,10 @@
     <Compile Include="CuentasBancos.cs">
       <DependentUpon>ModelPersona.tt</DependentUpon>
     </Compile>
+    <Compile Include="CuentasClases\CuentasClase.cs" />
+    <Compile Include="GetCuentasById_Result.cs">
+      <DependentUpon>ModelPersona.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetPersonaById_Result.cs">
       <DependentUpon>ModelPersona.tt</DependentUpon>
     </Compile>
@@ -93,32 +97,30 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="ModelPersona.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ModelPersona.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="ModelPersona.edmx.diagram">
       <DependentUpon>ModelPersona.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="ModelPersona.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ModelPersona.Context.cs</LastGenOutput>
       <DependentUpon>ModelPersona.edmx</DependentUpon>
+      <LastGenOutput>ModelPersona.Context.cs</LastGenOutput>
     </Content>
     <Content Include="ModelPersona.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ModelPersona.edmx</DependentUpon>
       <LastGenOutput>ModelPersona.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
