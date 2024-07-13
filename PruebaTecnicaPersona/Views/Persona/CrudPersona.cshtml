@@ -95,14 +95,73 @@
     <br />
     <br />
     <br />
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EditarCuentas">
+        Agregar Cuenta
+    </button>
+
+    <div class="modal fade" id="EditarCuentas" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Administración de cuentas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="frmCuentas">
+                        <input type="hidden" id="idPersona" name="idPersona" value="@Model.idPersona" />
+                        <input type="hidden" id="idCuentas" name="idCuentas" value="0" />
+                        <div>
+                            <div class="input-group">
+                                <span class="input-group-text">Banco</span>
+                                <input type="text" class="form-control" id="Banco" name="Banco" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-group">
+                                <span class="input-group-text">Cuenta</span>
+                                <input type="text" class="form-control" id="Cuenta" name="Cuenta" />
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="GuardarCuenta()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h1>Cuentas Ligadas</h1>
     <table id="TablaDinamica" class="table table-responsive table-striped">
     </table>
 }
 
 <script>
+
+
+
     const _urlGeneral = '@Url.Content("~/")';
     const tablaDinamica = document.querySelector('#TablaDinamica');
+    function asignarEventosEditar() {
+        const buttonsEditar = document.querySelectorAll('.editar');
+        buttonsEditar.forEach((btn) => {
+            btn.addEventListener('click', e => {
+                editarCuentas(e.target.value);
+            });
+        });
+    }
+
+    function asignarEventosEliminar() {
+        const buttonsEliminar = document.querySelectorAll('.eliminar');
+        buttonsEliminar.forEach((btn) => {
+            btn.addEventListener('click', e => {
+                eliminarCuentas(e.target.value);
+            });
+        });
+    }
+
     function TablaDinamicaJson(datos) {
         var cabeceras = [];
         if (datos.length > 0) {
@@ -114,20 +173,46 @@
                 celda.textContent = cabeceras[i];
                 fila.append(celda);
             }
+            celda = document.createElement('th');
+            celda.textContent += "Editar";
+            fila.append(celda);
+            celda = document.createElement('th');
+            celda.textContent += "Eliminar";
+            fila.append(celda);
             tablaDinamica.append(fila)
         }
 
-            let columna;
+        let columna;
+        let idRegistro;
             for (var a = 0; a < datos.length; a++) {
                 let fila = document.createElement('tr');
                 for (var b = 0; b < cabeceras.length; b++) {
                     columna = document.createElement('td');
                     columna.textContent = datos[a][cabeceras[b]];
                     fila.append(columna);
+                    idRegistro = datos[a]["idCuentas"];
                 }
+                columna = document.createElement('td');
+                var editar = document.createElement('button');
+                editar.textContent = 'Editar';
+                editar.setAttribute('value', idRegistro);
+                editar.setAttribute('name', 'idCuentas');
+                editar.classList.add('editar')
+                columna.appendChild(editar);
+                fila.append(columna);
+                columna = document.createElement('td');
+                var eliminar = document.createElement('button');
+                eliminar.textContent = 'Eliminar';
+                eliminar.setAttribute('value', idRegistro);
+                eliminar.setAttribute('name', 'eliminar');
+                eliminar.classList.add('eliminar');
+                columna.appendChild(eliminar);
+                fila.append(columna);
 
                 tablaDinamica.append(fila);
-            }
+        }
+        asignarEventosEditar();
+        asignarEventosEliminar();
     }
 
     function getCuentas() {
@@ -141,6 +226,69 @@
                 TablaDinamicaJson(data);
             }
         });
+    }
+    
+    function editarCuentas(idRegistro) {
+        $.ajax({
+            type: "Get",
+            data: { id: idRegistro },
+            async : false,
+            url: _urlGeneral + "Cuentas/GetcuentasById",
+            success: function (data) {
+                if (data) {
+                    $('#Banco').val(data.Banco);
+                    $('#Cuenta').val(data.Cuenta);
+                    $('#idCuentas').val(data.idCuentas);
+                    $('#EditarCuentas').modal('show');
+                }
+            }
+        });
+    }
+
+    function eliminarCuentas(idRegistro) {
+        $.ajax({
+            type: "POST",
+            data: { id: idRegistro },
+            url: _urlGeneral + "Cuentas/Delete",
+            async: false,
+            success: function (response) {
+                if (response.success) {
+                    tablaDinamica.innerHTML = "";
+                    getCuentas();
+                }
+            }, 
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    function GuardarCuenta() {
+        tablaDinamica.innerHTML = "";
+        const idCuenta = document.querySelector('#idCuentas');
+        const idPersona = document.querySelector('#idPersona');
+        const banco = document.querySelector('#Banco');
+        const cuenta = document.querySelector('#Cuenta');
+        $.ajax({
+            
+            type: "POST",
+            url: _urlGeneral + "Cuentas/CrudCuentas",
+            data: {
+                id: idCuenta.value,
+                idPersona : idPersona.value,
+                Banco : banco.value,
+                Cuenta : cuenta.value
+            },
+            success: function (response) {
+                if (response.success) {
+                    $('#EditarCuentas').modal('hide');
+                    getCuentas();
+                }
+                else {
+                    console.error();
+                }
+            }
+        })
     }
 
     document.addEventListener('DOMContentLoaded', getCuentas);

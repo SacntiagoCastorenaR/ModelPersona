@@ -33,6 +33,15 @@ namespace ModelPersona
         public virtual DbSet<Sexo> Sexo { get; set; }
         public virtual DbSet<TipoRegimenFiscal> TipoRegimenFiscal { get; set; }
     
+        public virtual int DeleteCuenta(Nullable<int> idCuentas)
+        {
+            var idCuentasParameter = idCuentas.HasValue ?
+                new ObjectParameter("idCuentas", idCuentas) :
+                new ObjectParameter("idCuentas", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteCuenta", idCuentasParameter);
+        }
+    
         public virtual int DeletePersona(Nullable<int> idPersona)
         {
             var idPersonaParameter = idPersona.HasValue ?
@@ -40,6 +49,15 @@ namespace ModelPersona
                 new ObjectParameter("idPersona", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeletePersona", idPersonaParameter);
+        }
+    
+        public virtual ObjectResult<GetCuentasById_Result> GetCuentasById(Nullable<int> idCuentas)
+        {
+            var idCuentasParameter = idCuentas.HasValue ?
+                new ObjectParameter("idCuentas", idCuentas) :
+                new ObjectParameter("idCuentas", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCuentasById_Result>("GetCuentasById", idCuentasParameter);
         }
     
         public virtual ObjectResult<GetPersona_Result> GetPersona()
@@ -54,6 +72,23 @@ namespace ModelPersona
                 new ObjectParameter("idPersona", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPersonaById_Result>("GetPersonaById", idPersonaParameter);
+        }
+    
+        public virtual int InsertCuentas(Nullable<int> idPersona, string banco, string cuenta)
+        {
+            var idPersonaParameter = idPersona.HasValue ?
+                new ObjectParameter("idPersona", idPersona) :
+                new ObjectParameter("idPersona", typeof(int));
+    
+            var bancoParameter = banco != null ?
+                new ObjectParameter("Banco", banco) :
+                new ObjectParameter("Banco", typeof(string));
+    
+            var cuentaParameter = cuenta != null ?
+                new ObjectParameter("Cuenta", cuenta) :
+                new ObjectParameter("Cuenta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertCuentas", idPersonaParameter, bancoParameter, cuentaParameter);
         }
     
         public virtual int InsertPersona(string nombre, string apellidoPaterno, string apellidoMaterno, Nullable<int> idTipoRegimen, Nullable<System.DateTime> fechaNacimiento, string rFC, string cURP, Nullable<int> idPais, Nullable<int> idSexo, Nullable<bool> estatus)
@@ -99,6 +134,36 @@ namespace ModelPersona
                 new ObjectParameter("Estatus", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertPersona", nombreParameter, apellidoPaternoParameter, apellidoMaternoParameter, idTipoRegimenParameter, fechaNacimientoParameter, rFCParameter, cURPParameter, idPaisParameter, idSexoParameter, estatusParameter);
+        }
+    
+        public virtual ObjectResult<string> JsonCuentasBancos(Nullable<int> idPersona)
+        {
+            var idPersonaParameter = idPersona.HasValue ?
+                new ObjectParameter("idPersona", idPersona) :
+                new ObjectParameter("idPersona", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("JsonCuentasBancos", idPersonaParameter);
+        }
+    
+        public virtual int UpdateCuentas(Nullable<int> idCuentas, Nullable<int> idPersona, string banco, string cuenta)
+        {
+            var idCuentasParameter = idCuentas.HasValue ?
+                new ObjectParameter("idCuentas", idCuentas) :
+                new ObjectParameter("idCuentas", typeof(int));
+    
+            var idPersonaParameter = idPersona.HasValue ?
+                new ObjectParameter("idPersona", idPersona) :
+                new ObjectParameter("idPersona", typeof(int));
+    
+            var bancoParameter = banco != null ?
+                new ObjectParameter("Banco", banco) :
+                new ObjectParameter("Banco", typeof(string));
+    
+            var cuentaParameter = cuenta != null ?
+                new ObjectParameter("Cuenta", cuenta) :
+                new ObjectParameter("Cuenta", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateCuentas", idCuentasParameter, idPersonaParameter, bancoParameter, cuentaParameter);
         }
     
         public virtual int UpdatePresona(Nullable<int> idPersona, string nombre, string apellidoPaterno, string apellidoMaterno, Nullable<int> idTipoRegimen, Nullable<System.DateTime> fechaNacimiento, string rFC, string cURP, Nullable<int> idPais, Nullable<int> idSexo, Nullable<bool> estatus)
@@ -148,15 +213,6 @@ namespace ModelPersona
                 new ObjectParameter("Estatus", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdatePresona", idPersonaParameter, nombreParameter, apellidoPaternoParameter, apellidoMaternoParameter, idTipoRegimenParameter, fechaNacimientoParameter, rFCParameter, cURPParameter, idPaisParameter, idSexoParameter, estatusParameter);
-        }
-    
-        public virtual ObjectResult<string> JsonCuentasBancos(Nullable<int> idPersona)
-        {
-            var idPersonaParameter = idPersona.HasValue ?
-                new ObjectParameter("idPersona", idPersona) :
-                new ObjectParameter("idPersona", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("JsonCuentasBancos", idPersonaParameter);
         }
     }
 }
